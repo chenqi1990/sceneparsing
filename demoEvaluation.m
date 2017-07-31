@@ -7,9 +7,9 @@ VERBOSE = 0;    % to show individual image results, set it to 1
 
 % path to image(.jpg), prediction(.png) and annotation(.png)
 % *NOTE: change these paths while evaluating your own predictions
-pathImg = fullfile('sampleData', 'images');
-pathPred = fullfile('sampleData', 'predictions');
-pathAnno = fullfile('sampleData', 'annotations');
+pathImg =  fullfile('../data/ADEChallengeData2016', 'images', 'validation');
+pathPred = fullfile('../data/results/ADEChallengeData2016', 'dilatednet');
+pathAnno = fullfile('../data/ADEChallengeData2016', 'annotations', 'validation');
 
 addpath(genpath('evaluationCode/'));
 addpath(genpath('visualizationCode'));

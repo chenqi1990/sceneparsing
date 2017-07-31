@@ -6,7 +6,7 @@ addpath(genpath('visualizationCode'));
 
 
 % path to caffe (compile matcaffe first, or you could use python wrapper instead)
-addpath 'yourcaffe/matlab' 
+addpath '/home/chenqi/caffe-github-master/matlab' 
 
 % select the pre-trained model. Use 'FCN' for 
 % the Fully Convolutional Network or 'Dilated' for DilatedNet
@@ -14,13 +14,13 @@ addpath 'yourcaffe/matlab'
 % http://sceneparsing.csail.mit.edu/model/FCN_iter_160000.caffemodel
 % and the DilatedNet model at
 % http://sceneparsing.csail.mit.edu/model/DilatedNet_iter_120000.caffemodel
-model_type = 'FCN'; %Dilated'
+model_type = 'Dilated'
 if (strcmp(model_type, 'FCN'))
 	model_definition = 'models/deploy_FCN.prototxt';
-	model_weights = 'FCN_iter_160000.caffemodel';
+	model_weights = 'models/FCN_iter_160000.caffemodel';
 elseif (strcmp(model_type, 'Dilated')) 
 	model_definition = 'models/deploy_DilatedNet.prototxt';
-	model_weights = 'DilatedNet_iter_120000.caffemodel';
+	model_weights = 'models/DilatedNet_iter_120000.caffemodel';
 end
 disp(model_definition)
 prediction_folder = sprintf('predictions_%s', model_type);
@@ -29,9 +29,9 @@ prediction_folder = sprintf('predictions_%s', model_type);
 net = caffe.Net(model_definition, model_weights, 'test');
 
 % path to image(.jpg) and annotation(.png) and generated prediction(.png)
-pathImg = fullfile('sampleData', 'images');
-pathAnno = fullfile('sampleData', 'annotations');
-pathPred = fullfile('sampleData', prediction_folder);
+pathImg =  fullfile('../data/ADEChallengeData2016', 'images', 'validation');
+pathPred = fullfile('../data/results/ADEChallengeData2016', 'dilatednet');
+pathAnno = fullfile('../data/ADEChallengeData2016', 'annotations', 'validation');
 
 if (~exist(pathPred, 'dir'))
 	mkdir(pathPred);
@@ -48,6 +48,8 @@ for i = 1: numel(filesImg)
     fileImg = fullfile(pathImg, filesImg(i).name);
     fileAnno = fullfile(pathAnno, strrep(filesImg(i).name, '.jpg', '.png'));
     filePred = fullfile(pathPred, strrep(filesImg(i).name, '.jpg', '.png'));
+
+    fprintf("file %s\tfilePred %s\n", filesImg(i).name, filePred);
 
     im = imread(fileImg);
     imAnno = imread(fileAnno);
@@ -68,7 +70,7 @@ for i = 1: numel(filesImg)
     imPred = uint8(imPred')-1;
     imPred = imresize(imPred, [size(im,1), size(im,2)], 'nearest');
     imwrite(imPred, filePred);
- 
+%{
     % color encoding
     rgbPred = colorEncode(imPred, colors);
     rgbAnno = colorEncode(imAnno, colors);
@@ -93,5 +95,6 @@ for i = 1: numel(filesImg)
     imshow(rgbAnno); title('Annotation-color');
 
     waitforbuttonpress;
+%}
     
 end
