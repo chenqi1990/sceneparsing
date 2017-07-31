@@ -27,9 +27,9 @@ class AdeSegDataLayer(caffe.Layer):
         """
         # config
         params = eval(self.param_str)
-        self.ade_dir = 'XXX/trainval/' # add the path to the dataset
+        self.ade_dir = '/home/chenqi/places_challenge_2017/data/ADEChallengeData2016' # add the path to the dataset
         self.split = params['split']
-        self.split_dir = 'XXX' # add path to the split files
+        self.split_dir = self.ade_dir # add path to the split files
         self.mean = np.array(params['mean'])
         self.random = params.get('randomize', True)
         self.seed = params.get('seed', None)
