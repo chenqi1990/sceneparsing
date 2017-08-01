@@ -1,6 +1,8 @@
+function demoEvaluation(predPath)
+
 % This script demos evaluation on all the prediction maps in pathPred
 % make sure you have corresponding ground truth label maps in pathLab
-close all; clc; clear;
+fprintf("predPath %s\n", predPath);
 
 %% Options and paths
 VERBOSE = 0;    % to show individual image results, set it to 1
@@ -8,7 +10,7 @@ VERBOSE = 0;    % to show individual image results, set it to 1
 % path to image(.jpg), prediction(.png) and annotation(.png)
 % *NOTE: change these paths while evaluating your own predictions
 pathImg =  fullfile('../data/ADEChallengeData2016', 'images', 'validation');
-pathPred = fullfile('../data/results/ADEChallengeData2016', 'dilatednet');
+pathPred = fullfile('../data/results/ADEChallengeData2016', predPath);
 pathAnno = fullfile('../data/ADEChallengeData2016', 'annotations', 'validation');
 
 addpath(genpath('evaluationCode/'));
@@ -85,3 +87,4 @@ for i = 1:numClass
 end
 fprintf('Mean IoU over %d classes: %.4f\n', numClass, mean_IoU);
 fprintf('Pixel-wise Accuracy: %2.2f%%\n', accuracy*100.);
+exit

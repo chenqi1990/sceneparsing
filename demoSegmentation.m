@@ -1,7 +1,8 @@
 % This script demos how to use the pre-trained models to
 % obtain the predicted segmentations
 
-close all; clc; clear;
+function demoSegmentation(model_definition, model_weights, result_folder)
+
 addpath(genpath('visualizationCode'));
 
 
@@ -14,17 +15,22 @@ addpath '/home/chenqi/workspace/caffe/matlab'
 % http://sceneparsing.csail.mit.edu/model/FCN_iter_160000.caffemodel
 % and the DilatedNet model at
 % http://sceneparsing.csail.mit.edu/model/DilatedNet_iter_120000.caffemodel
-model_type = 'fcn'
-model_type = 'dilatednet'
-if (strcmp(model_type, 'fcn'))
-	model_definition = 'models/deploy_FCN.prototxt';
-	model_weights = 'models/FCN_iter_160000.caffemodel';
-elseif (strcmp(model_type, 'dilatednet')) 
-	model_definition = 'models/deploy_DilatedNet.prototxt';
-	model_weights = 'models/DilatedNet_iter_120000.caffemodel';
-end
+
+% model_type = 'fcn'
+% model_type = 'dilatednet'
+% if (strcmp(model_type, 'fcn'))
+% 	model_definition = 'models/deploy_FCN.prototxt';
+% 	model_weights = 'models/FCN_iter_160000.caffemodel';
+% elseif (strcmp(model_type, 'dilatednet')) 
+% 	model_definition = 'models/deploy_DilatedNet.prototxt';
+% 	model_weights = 'models/DilatedNet_iter_120000.caffemodel';
+% end
+
+fprintf("model def: %s\n", model_definition);
+fprintf("model wei: %s\n", model_weights);
+fprintf("result_fo: %s\n", result_folder);
+
 disp(model_definition)
-prediction_folder = sprintf('predictions_%s', model_type);
 
 % initialize the network
 caffe.set_mode_gpu();
@@ -34,7 +40,7 @@ net = caffe.Net(model_definition, model_weights, 'test');
 
 % path to image(.jpg) and annotation(.png) and generated prediction(.png)
 pathImg =  fullfile('../data/ADEChallengeData2016', 'images', 'validation');
-pathPred = fullfile('../data/results/ADEChallengeData2016', model_type);
+pathPred = fullfile('../data/results/ADEChallengeData2016', result_folder);
 pathAnno = fullfile('../data/ADEChallengeData2016', 'annotations', 'validation');
 
 if (~exist(pathPred, 'dir'))
@@ -102,3 +108,4 @@ for i = 1: numel(filesImg)
 %}
     
 end
+exit
