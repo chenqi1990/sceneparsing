@@ -14,11 +14,12 @@ addpath '/home/chenqi/caffe-github-master/matlab'
 % http://sceneparsing.csail.mit.edu/model/FCN_iter_160000.caffemodel
 % and the DilatedNet model at
 % http://sceneparsing.csail.mit.edu/model/DilatedNet_iter_120000.caffemodel
-model_type = 'Dilated'
-if (strcmp(model_type, 'FCN'))
+model_type = 'fcn'
+model_type = 'dilatednet'
+if (strcmp(model_type, 'fcn'))
 	model_definition = 'models/deploy_FCN.prototxt';
 	model_weights = 'models/FCN_iter_160000.caffemodel';
-elseif (strcmp(model_type, 'Dilated')) 
+elseif (strcmp(model_type, 'dilatednet')) 
 	model_definition = 'models/deploy_DilatedNet.prototxt';
 	model_weights = 'models/DilatedNet_iter_120000.caffemodel';
 end
@@ -26,11 +27,14 @@ disp(model_definition)
 prediction_folder = sprintf('predictions_%s', model_type);
 
 % initialize the network
+caffe.set_mode_gpu();
+gpu_id = 3;
+caffe.set_device(gpu_id);
 net = caffe.Net(model_definition, model_weights, 'test');
 
 % path to image(.jpg) and annotation(.png) and generated prediction(.png)
 pathImg =  fullfile('../data/ADEChallengeData2016', 'images', 'validation');
-pathPred = fullfile('../data/results/ADEChallengeData2016', 'dilatednet');
+pathPred = fullfile('../data/results/ADEChallengeData2016', model_type);
 pathAnno = fullfile('../data/ADEChallengeData2016', 'annotations', 'validation');
 
 if (~exist(pathPred, 'dir'))
