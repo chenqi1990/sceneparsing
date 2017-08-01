@@ -6,7 +6,7 @@ addpath(genpath('visualizationCode'));
 
 
 % path to caffe (compile matcaffe first, or you could use python wrapper instead)
-addpath '/home/chenqi/caffe-github-master/matlab' 
+addpath '/home/chenqi/workspace/caffe/matlab'
 
 % select the pre-trained model. Use 'FCN' for 
 % the Fully Convolutional Network or 'Dilated' for DilatedNet
